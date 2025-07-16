@@ -1,0 +1,13 @@
+all: True
+dir: ./
+structname: "Mock{{.InterfaceName}}"
+filename: "mock_{{.InterfaceName}}_test.go"
+force-file-write: true
+pkgname: gronats
+packages:
+  github.com/godepo/gronats:
+    config:
+      all: False
+    interfaces:
+      NATsContainer:
+        config:
