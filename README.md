@@ -1,6 +1,6 @@
 # GroNATs
 
-[![codecov](https://codecov.io/gh/godepo/gronats/graph/badge.svg?token=iURBohNmU9)](https://codecov.io/gh/godepo/gronats)
+[![codecov](https://codecov.io/gh/godepo/gronats/graph/badge.svg?token=PxxK11IBFs)](https://codecov.io/gh/godepo/gronats)
 [![Go Report Card](https://goreportcard.com/badge/godepo/gronats)](https://goreportcard.com/report/godepo/gronats)
 [![License](https://img.shields.io/badge/License-MIT%202.0-blue.svg)](https://github.com/godepo/gronats/blob/main/LICENSE)
 
