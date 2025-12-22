@@ -5,7 +5,7 @@ go 1.24.2
 require (
 	github.com/godepo/groat v0.0.1
 	github.com/google/uuid v1.6.0
-	github.com/nats-io/nats.go v1.43.0
+	github.com/nats-io/nats.go v1.48.0
 	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.38.0
 	github.com/testcontainers/testcontainers-go/modules/nats v0.38.0
