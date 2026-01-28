@@ -38,12 +38,12 @@ func TestMain(m *testing.M) {
 			return tcs
 		},
 		New[Deps](
-
 			WithInjectLabel("gronats"),
 			WithContainerImage("nats:2.6"),
 			WithImageEnvValue("GROAT_I9N_NATS_IMAGE"),
 			WithInjectLabelCasePrefix("gronats.prefix"),
 			WithInjectLabelDSN("gronats.config"),
+			WithNameSpaceLabel("gronats"),
 		),
 	)
 	os.Exit(suite.Go())

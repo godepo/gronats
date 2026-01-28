@@ -51,6 +51,7 @@ type (
 		injectLabelsConnectionString string
 		injectLabelPrefix            string
 		natsConnector                func(url string, options ...natsClient.Option) (*natsClient.Conn, error)
+		namespaceLabel               string
 	}
 
 	// Option represents a configuration option for configure the NATS container construction.
@@ -118,6 +119,12 @@ func WithImageEnvValue(env string) Option {
 	}
 }
 
+func WithNameSpaceLabel(label string) Option {
+	return func(c *config) {
+		c.namespaceLabel = label
+	}
+}
+
 // New creates a new factory method for build NATS integration container with the given options.
 func New[T any](options ...Option) integration.Bootstrap[T] {
 	cfg := config{
@@ -145,16 +152,26 @@ func New[T any](options ...Option) integration.Bootstrap[T] {
 
 func bootstrapper[T any](cfg config) integration.Bootstrap[T] {
 	return func(ctx context.Context) (integration.Injector[T], error) {
-		natsContainer, err := cfg.runner(ctx, cfg.containerImage)
-		if err != nil {
-			return nil, fmt.Errorf("nats container failed to run: %w", err)
+		var DSN = os.Getenv("GROAT_I9N_NATS")
+		if DSN == "" {
+			natsContainer, err := cfg.runner(ctx, cfg.containerImage)
+			if err != nil {
+				return nil, fmt.Errorf("nats container failed to run: %w", err)
+			}
+
+			ctxgroup.IncAt(ctx)
+
+			go containersync.Terminator(ctx, natsContainer.Terminate)()
+
+			connectionString, err := natsContainer.ConnectionString(ctx)
+			if err != nil {
+				return nil, fmt.Errorf("can't get connection string: %w", err)
+			}
+
+			DSN = connectionString
 		}
 
-		ctxgroup.IncAt(ctx)
-
-		go containersync.Terminator(ctx, natsContainer.Terminate)()
-
-		container, err := newContainer[T](ctx, natsContainer, cfg)
+		container, err := newContainer[T](ctx, DSN, cfg)
 		if err != nil {
 			return nil, err
 		}
